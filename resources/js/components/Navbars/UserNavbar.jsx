@@ -1,5 +1,10 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+import { SESSION_LOGOUT } from '../../store/actions/constants';
+
+
 // reactstrap components
 import {
     DropdownMenu,
@@ -11,19 +16,22 @@ import {
     Container,
     Media, NavbarBrand, Row, Col, NavItem, NavLink, UncontrolledCollapse
 } from "reactstrap";
+import {getCurrentUserInfo} from "../../store/actions/user-actions";
+
+
 
 class UserNavbar extends Component {
 
 
-    logOut(e){
+    handleLogOut = (e) => {
         e.preventDefault();
-        localStorage.removeItem('usertoken');
-        localStorage.removeItem('user');
-        this.props.history.push(`/`)
-    }
+        axios.get('/api/logout')
+            .then(this.props.dispatch({ type: SESSION_LOGOUT }))
+            .then(res => this.props.history.push('/auth/login'))
+    };
 
     render() {
-        const isAuthenticated = (
+        const isAuth = (
             <Nav className="align-items-center d-none d-md-flex" navbar>
                 <UncontrolledDropdown nav>
                     <DropdownToggle className="pr-0" nav>
@@ -36,14 +44,14 @@ class UserNavbar extends Component {
                                 </span>
                             <Media className="ml-2 d-none d-lg-block">
                                 <span className="mb-0 text-sm font-weight-bold">
-                                    {this.props.name}
+                                    {this.props.user.first_name + this.props.user.last_name}
                                 </span>
                             </Media>
                         </Media>
                     </DropdownToggle>
                     <DropdownMenu className="dropdown-menu-arrow" right>
                         <DropdownItem className="noti-title" header tag="div">
-                            <h6 className="text-overflow m-0">Welcome!</h6>
+                            <h6 className="text-overflow m-0">Welcome {this.props.user.first_name}</h6>
                         </DropdownItem>
                         <DropdownItem to="/user/profile" tag={Link}>
                             <i className="ni ni-single-02" />
@@ -62,7 +70,7 @@ class UserNavbar extends Component {
                             <span>Support</span>
                         </DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem href="#pablo" onClick={this.logOut.bind(this)}>
+                        <DropdownItem href="#pablo" onClick={this.handleLogOut}>
                             <i className="ni ni-user-run" />
                             <span>Logout</span>
                         </DropdownItem>
@@ -132,7 +140,7 @@ class UserNavbar extends Component {
                                     </Col>
                                 </Row>
                             </div>
-                        {localStorage.usertoken ? isAuthenticated : loginRegLinks}
+                            { this.props.isAuthenticated ? isAuth : loginRegLinks }
                         </UncontrolledCollapse>
                     </Container>
                 </Navbar>
@@ -141,4 +149,11 @@ class UserNavbar extends Component {
     }
 }
 
-export default UserNavbar;
+const mapStateToProps = state => ({
+    user : state.userReducer.user,
+    isAuthenticated: state.userReducer.isAuthenticated
+});
+
+
+
+export default connect(mapStateToProps)(UserNavbar);

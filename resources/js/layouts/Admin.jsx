@@ -1,5 +1,6 @@
 import React from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
@@ -9,7 +10,7 @@ import Sidebar from "../components/Sidebar/Sidebar.jsx";
 
 import routes from "../routes.js";
 
-class User extends React.Component {
+class Admin extends React.Component {
     componentDidUpdate(e) {
         document.documentElement.scrollTop = 0;
         document.scrollingElement.scrollTop = 0;
@@ -44,9 +45,9 @@ class User extends React.Component {
         return "Brand";
     };
     render() {
-        if (!localStorage.getItem('usertoken')) {
-            return <Redirect to="/auth/login" />;
-        }
+        // if (!localStorage.getItem('usertoken')) {
+        //     return <Redirect to="/auth/login" />;
+        // }
         return (
             <>
                 <Sidebar
@@ -73,4 +74,4 @@ class User extends React.Component {
     }
 }
 
-export default User;
+export default Admin;

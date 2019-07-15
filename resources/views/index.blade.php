@@ -24,13 +24,13 @@
                 rel="stylesheet"
         />
         <title>Argon Dashboard React</title>
-
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body>
         <div id="app">
 
         </div>
     </body>
-    <script charset="utf8" src="/js/app.js"></script>
-{{--    <script charset="utf8" src="/js/vendors~app.js"></script>--}}
+{{--    <script charset="utf8" src="/js/app.js"></script>--}}
+    <script src="{{ mix('js/app.js') }}"></script>
 </html>

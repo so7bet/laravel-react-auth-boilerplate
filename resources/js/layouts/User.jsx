@@ -11,22 +11,6 @@ import routes from "../routes.js";
 
 
 class User extends Component {
-    constructor(){
-        super();
-        this.state = {
-            user : {}
-        }
-    }
-
-    // loadUser = () => {
-    //     this.setState({user: {
-    //             id: data.id,
-    //             name: data.name,
-    //             email: data.email,
-    //             entries: data.entries,
-    //             joined: data.joined
-    //         }})
-    // };
 
     componentDidUpdate(e) {
         document.documentElement.scrollTop = 0;
@@ -68,7 +52,6 @@ class User extends Component {
                 <div className="main-content" ref="mainContent">
                     <UserNavbar
                         {...this.props}
-                        name={localStorage.getItem('username')}
                         brandText={this.getBrandText(this.props.location.pathname)}
                     />
                     <UserHeader />

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import {Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 // reactstrap components
 import {
     Button,
@@ -13,12 +14,12 @@ import {
     Row,
     Col
 } from "reactstrap";
-import {Redirect} from "react-router-dom";
+
 // core components
 
 class Profile extends Component {
     render() {
-        if (!localStorage.getItem('usertoken')) {
+        if(!this.props.isAuthenticated){
             return <Redirect to="/auth/login" />;
         }
         return (
@@ -84,7 +85,7 @@ class Profile extends Component {
                                     </Row>
                                     <div className="text-center">
                                         <h3>
-                                            Jessica Jones
+                                            {this.props.user.first_name} {this.props.user.last_name}
                                             <span className="font-weight-light">, 27</span>
                                         </h3>
                                         <div className="h5 font-weight-300">
@@ -148,7 +149,7 @@ class Profile extends Component {
                                                         </label>
                                                         <Input
                                                             className="form-control-alternative"
-                                                            defaultValue="lucky.jesse"
+                                                            defaultValue={this.props.user.first_name }
                                                             id="input-username"
                                                             placeholder="Username"
                                                             type="text"
@@ -166,7 +167,7 @@ class Profile extends Component {
                                                         <Input
                                                             className="form-control-alternative"
                                                             id="input-email"
-                                                            placeholder="jesse@example.com"
+                                                            placeholder={this.props.user.email}
                                                             type="email"
                                                         />
                                                     </FormGroup>
@@ -183,7 +184,7 @@ class Profile extends Component {
                                                         </label>
                                                         <Input
                                                             className="form-control-alternative"
-                                                            defaultValue="Lucky"
+                                                            defaultValue={this.props.user.first_name}
                                                             id="input-first-name"
                                                             placeholder="First name"
                                                             type="text"
@@ -200,7 +201,7 @@ class Profile extends Component {
                                                         </label>
                                                         <Input
                                                             className="form-control-alternative"
-                                                            defaultValue="Jesse"
+                                                            defaultValue={this.props.user.last_name}
                                                             id="input-last-name"
                                                             placeholder="Last name"
                                                             type="text"
@@ -313,5 +314,9 @@ class Profile extends Component {
         );
     }
 }
+const mapStateToProps = state => ({
+    user : state.userReducer.user,
+    isAuthenticated: state.userReducer.isAuthenticated
+});
 
-export default Profile;
+export default connect(mapStateToProps)(Profile);
